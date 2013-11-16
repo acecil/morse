@@ -1,3 +1,13 @@
 *~
 *.o
 morse
+*.vcxproj*
+CMakeFiles
+CMakeCache.txt
+Debug
+Win32
+cmake_install.cmake
+morse.dir
+*.opensdf
+*.sdf
+*.sln
