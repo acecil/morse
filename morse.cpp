@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "morse.h"
+using namespace morse;
 
 int main()
 {

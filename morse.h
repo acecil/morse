@@ -91,32 +91,32 @@ namespace morse
 				current = "";
 				break;
 			case '.':
-			{
-						auto it(dot.find(current));
-						if (it != dot.end())
-						{
-							current = it->second;
-							currM += *c;
-						}
-						else
-						{
-							throw new std::invalid_argument(currM);
-						}
-			}
+				{
+					auto it(dot.find(current));
+					if (it != dot.end())
+					{
+						current = it->second;
+						currM += *c;
+					}
+					else
+					{
+						throw new std::invalid_argument(currM);
+					}
+				}
 				break;
 			case '-':
-			{
-						auto it(dash.find(current));
-						if (it != dash.end())
-						{
-							current = it->second;
-							currM += *c;
-						}
-						else
-						{
-							throw new std::invalid_argument(currM);
-						}
-			}
+				{
+					auto it(dash.find(current));
+					if (it != dash.end())
+					{
+						current = it->second;
+						currM += *c;
+					}
+					else
+					{
+						throw new std::invalid_argument(currM);
+					}
+				}
 				break;
 			default:
 				throw new std::invalid_argument(std::string("bad morse code character"));

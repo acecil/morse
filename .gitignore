@@ -11,3 +11,4 @@ morse.dir
 *.opensdf
 *.sdf
 *.sln
+Makefile
