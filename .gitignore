@@ -12,3 +12,4 @@ morse.dir
 *.sdf
 *.sln
 Makefile
+*.kdev4

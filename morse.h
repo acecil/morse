@@ -1,15 +1,44 @@
 ﻿#pragma once
 
+#include <cstring>
 #include <map>
 #include <stdexcept>
 #include <string>
+#include "utf8.h"
 
-namespace morse
+class morse
 {
-	std::string operator "" _m(const char text[], long unsigned int len)
+public:
+	morse() : m_text() {}
+	morse(const char text[]) : m_text(encode(text)) {}
+	morse(const std::string& text) : m_text(encode(text)) {}
+	morse(const morse& other) : m_text(other.m_text) {}
+	morse(morse&& other) : m_text(std::move(other.m_text)) {}
+	
+	morse& operator=(const char text[]) { m_text = encode(text); return *this; }
+	morse& operator=(const std::string& text) { m_text = encode(text); return *this; }
+	morse& operator=(const morse& other) { m_text = other.m_text; return *this; }
+	morse& operator=(morse&& other) { m_text = std::move(other.m_text); return *this; }
+	
+	morse& assign(const char text[]) { m_text = encode(text); return *this; }
+	morse& assign(const std::string& text) { m_text = encode(text); return *this; }
+	morse& assign(const morse& other) { m_text = other.m_text; return *this; }
+	morse& assign(morse&& other) { m_text = std::move(other.m_text); return *this; }
+	
+	operator const char*() const { return m_text.c_str(); }
+	operator std::string() { return m_text; }
+	operator const std::string() const { return m_text; }
+	operator const std::string&() const { return m_text; }
+	
+	morse& set_morse(const char text[]) { m_text = text; return *this; }
+	morse& set_morse(const std::string& text) { m_text = text; return *this; }
+	morse& set_morse(std::string&& text) { m_text = std::move(text); return *this; }
+	
+	bool operator==(const morse& other) { return m_text == other.m_text; }
+	
+	std::string decode() const
 	{
-		std::string s;
-		static std::map<const char*, const char*> dot =
+		static const std::map<const char*, const char*> dot =
 		{
 			{ "", "e" },
 			{ "e", "i" },
@@ -48,7 +77,7 @@ namespace morse
 			{ "q", "ĝ" },
 			{ "ch", "9" }
 		};
-		static std::map<const char*, const char*> dash =
+		static const std::map<const char*, const char*> dash =
 		{
 			{ "", "t" },
 			{ "e", "a" },
@@ -79,24 +108,32 @@ namespace morse
 			{ "ch", "0" }
 		};
 
+		std::string s;
 		std::string currM;
 		const char *current = "";
-		for (const char *c = text; *c; ++c)
+		for (const char c : m_text)
 		{
-			switch (*c)
+			switch (c)
 			{
 			case ' ':
-				s += current;
+				if( current == "" )
+				{
+					s += " ";
+				}
+				else
+				{
+					s += current;
+				}
 				currM = "";
 				current = "";
 				break;
 			case '.':
 				{
 					auto it(dot.find(current));
-					if (it != dot.end())
+					if (it != dot.cend())
 					{
 						current = it->second;
-						currM += *c;
+						currM += c;
 					}
 					else
 					{
@@ -107,10 +144,10 @@ namespace morse
 			case '-':
 				{
 					auto it(dash.find(current));
-					if (it != dash.end())
+					if (it != dash.cend())
 					{
 						current = it->second;
-						currM += *c;
+						currM += c;
 					}
 					else
 					{
@@ -127,4 +164,146 @@ namespace morse
 
 		return s;
 	}
+	
+private:
+	std::string m_text; // Morse code string.
+	
+	static std::string encode(const std::string& text)
+	{
+		static const std::map<std::string, std::string> tab =
+		{
+			{ " ", " " },
+			{ "a", ".-" },
+			{ "b", "-..." },
+			{ "c", "-.-." },
+			{ "d", "-.." },
+			{ "e", "." },
+			{ "f", "..-." },
+			{ "g", "--." },
+			{ "h", "...." },
+			{ "i", ".." },
+			{ "j", ".---" },
+			{ "k", "-.-" },
+			{ "l", ".-.." },
+			{ "m", "--" },
+			{ "n", "-." },
+			{ "o", "---" },
+			{ "p", ".--." },
+			{ "q", "--.-" },
+			{ "r", ".-." },
+			{ "s", "..." },
+			{ "t", "-" },
+			{ "u", "..-" },
+			{ "v", "...-" },
+			{ "w", ".--" },
+			{ "x", "-..-" },
+			{ "y", "-.--" },
+			{ "z", "--.." },
+			{ "0", "-----" },
+			{ "1", ".----" },
+			{ "2", "..---" },
+			{ "3", "...--" },
+			{ "4", "....-" },
+			{ "5", "....." },
+			{ "6", "-...." },
+			{ "7", "--..." },
+			{ "8", "---.." },
+			{ "9", "----." },
+			{ ".", ".-.-.-" },
+			{ ",", "--..--" },
+			{ "?", "..--.." },
+			{ "'", ".----." },
+			{ "!", "-.-.--" },
+			{ "/", "-..-." },
+			{ "(", "-.--." },
+			{ ")", "-.--.-" },
+			{ "&", ".-..." },
+			{ ":", "---..." },
+			{ ";", "-.-.-." },
+			{ "=", "-...-" },
+			{ "+", ".-.-." },
+			{ "-", "-....-" },
+			{ "_", "..--.-" },
+			{ "\"", ".-..-." },
+			{ "$", "...-..-" },
+			{ "@", ".--.-." },
+			{ "ä", ".-.-" },
+			{ "æ", ".-.-" },
+			{ "ą", ".-.-" },
+			{ "à", ".--.-" },
+			{ "å", ".--.-" },
+			{ "ç", "-.-.." },
+			{ "ĉ", "-.-.." },
+			{ "ć", "-.-.." },
+			{ "š", "----" },
+			{ "ð", "..--." },
+			{ "ś", "...-..." },
+			{ "è", ".-..-" },
+			{ "ł", ".-..-" },
+			{ "é", "..-.." },
+			{ "đ", "..-.." },
+			{ "ę", "..-.." },
+			{ "ĝ", "--.-." },
+			{ "ĥ", "-.--." },
+			{ "ĵ", ".---." },
+			{ "ź", "--..-." },
+			{ "ñ", "--.--" },
+			{ "ń", "--.--" },
+			{ "ö", "---." },
+			{ "ø", "---." },
+			{ "ó", "---." },
+			{ "ŝ", "...-." },
+			{ "þ", ".--.." },
+			{ "ü", "..--" },
+			{ "ŭ", "..--" },
+			{ "ż", "--..-" }
+		};
+
+		std::string enc;
+		auto begin = utf8::iterator<std::string::const_iterator>(text.cbegin(), text.cbegin(), text.cend());
+		auto end = utf8::iterator<std::string::const_iterator>(text.cend(), text.cbegin(), text.cend());
+		for(auto it = begin; it != end; ++it)
+		{
+			auto cit = it;
+			std::string::const_iterator bit = it.base();
+			std::string::const_iterator eit = (++it).base();
+			std::string ch(bit, eit);
+			it = cit;
+			auto itt(tab.find(ch));
+			if( itt == tab.cend() )
+			{
+				throw new std::invalid_argument(ch);
+			}
+			if( !enc.empty() && (itt->second != " ") )
+			{
+				enc += " ";
+			}
+			enc += itt->second;
+		}
+		
+		return enc;
+	}
+};
+
+std::ostream& operator<<(std::ostream& os, const morse& obj)
+{
+	return os << static_cast<const std::string&>(obj);
+}
+std::istream& operator>>(std::istream& is, morse& obj)
+{
+	std::string text;
+	is >> text;
+	obj = text;
+	return is;
+}
+
+std::string to_string(const morse& m)
+{
+	return m.decode();
+}
+
+morse operator "" _m(const char text[], long unsigned int len)
+{
+	morse m;
+	return m.set_morse(text);
 }
