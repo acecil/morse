@@ -8,35 +8,35 @@
 
 namespace morse
 {
-  class morse
+  class morse_code
   {
   public:
-    morse() : m_text() {}
-    morse(const char text[]) : m_text(encode(text)) {}
-    morse(const std::string& text) : m_text(encode(text)) {}
-    morse(const morse& other) : m_text(other.m_text) {}
-    morse(morse&& other) : m_text(std::move(other.m_text)) {}
+    morse_code() : m_text() {}
+    morse_code(const char text[]) : m_text(encode(text)) {}
+    morse_code(const std::string& text) : m_text(encode(text)) {}
+    morse_code(const morse& other) : m_text(other.m_text) {}
+    morse_code(morse_code&& other) : m_text(std::move(other.m_text)) {}
     
-    morse& operator=(const char text[]) { m_text = encode(text); return *this; }
-    morse& operator=(const std::string& text) { m_text = encode(text); return *this; }
-    morse& operator=(const morse& other) { m_text = other.m_text; return *this; }
-    morse& operator=(morse&& other) { m_text = std::move(other.m_text); return *this; }
+    morse_code& operator=(const char text[]) { m_text = encode(text); return *this; }
+    morse_code& operator=(const std::string& text) { m_text = encode(text); return *this; }
+    morse_code& operator=(const morse_code& other) { m_text = other.m_text; return *this; }
+    morse_code& operator=(morse_code&& other) { m_text = std::move(other.m_text); return *this; }
     
-    morse& assign(const char text[]) { m_text = encode(text); return *this; }
-    morse& assign(const std::string& text) { m_text = encode(text); return *this; }
-    morse& assign(const morse& other) { m_text = other.m_text; return *this; }
-    morse& assign(morse&& other) { m_text = std::move(other.m_text); return *this; }
+    morse_code& assign(const char text[]) { m_text = encode(text); return *this; }
+    morse_code& assign(const std::string& text) { m_text = encode(text); return *this; }
+    morse_code& assign(const morse_code& other) { m_text = other.m_text; return *this; }
+    morse_code& assign(morse_code&& other) { m_text = std::move(other.m_text); return *this; }
     
     operator const char*() const { return m_text.c_str(); }
     operator std::string() { return m_text; }
     operator const std::string() const { return m_text; }
     operator const std::string&() const { return m_text; }
     
-    morse& set_morse(const char text[]) { m_text = text; return *this; }
-    morse& set_morse(const std::string& text) { m_text = text; return *this; }
-    morse& set_morse(std::string&& text) { m_text = std::move(text); return *this; }
+    morse_code& set_morse(const char text[]) { m_text = text; return *this; }
+    morse_code& set_morse(const std::string& text) { m_text = text; return *this; }
+    morse_code& set_morse(std::string&& text) { m_text = std::move(text); return *this; }
     
-    bool operator==(const morse& other) { return m_text == other.m_text; }
+    bool operator==(const morse_code& other) { return m_text == other.m_text; }
     
     std::string decode() const
     {
@@ -287,11 +287,11 @@ namespace morse
     }
   };
 
-  std::ostream& operator<<(std::ostream& os, const morse& obj)
+  std::ostream& operator<<(std::ostream& os, const morse_code& obj)
   {
     return os << static_cast<const std::string&>(obj);
   }
-  std::istream& operator>>(std::istream& is, morse& obj)
+  std::istream& operator>>(std::istream& is, morse_code& obj)
   {
     std::string text;
     is >> text;
@@ -299,15 +299,14 @@ namespace morse
     return is;
   }
 
-  std::string to_string(const morse& m)
+  std::string to_string(const morse_code& m)
   {
     return m.decode();
   }
 
-  morse operator "" _m(const char text[], long unsigned int len)
+  morse_code operator "" _m(const char text[], long unsigned int len)
   {
-    morse m;
-    return m.set_morse(text);
+    return text;
   }
 
 }

@@ -3,7 +3,7 @@
 
 #include "morse.h"
 
-using morse::morse;
+using morse::morse_code;
 using morse::to_string;
 using morse::operator"" _m;
 
@@ -15,7 +15,7 @@ int main()
 	auto helloworld = ".... . .-.. .-.. ---  .-- --- .-. .-.. -.."_m;
 	std::cout << helloworld << " = " << to_string(helloworld) << std::endl;
 
-	std::cout << (helloworld == morse("hello world")) << std::endl;
+	std::cout << (helloworld == morse_code("hello world")) << std::endl;
 	
 	return 0;
 }
