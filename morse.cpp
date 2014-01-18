@@ -3,6 +3,10 @@
 
 #include "morse.h"
 
+using morse::morse;
+using morse::to_string;
+using morse::operator"" _m;
+
 int main()
 {
 	auto abc = ".- -... -.-."_m;
