@@ -116,7 +116,7 @@ public:
 			switch (c)
 			{
 			case ' ':
-				if( current == "" )
+				if( current[0] == "\0" )
 				{
 					s += " ";
 				}
