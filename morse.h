@@ -14,7 +14,7 @@ namespace morse
     morse_code() : m_text() {}
     morse_code(const char text[]) : m_text(encode(text)) {}
     morse_code(const std::string& text) : m_text(encode(text)) {}
-    morse_code(const morse& other) : m_text(other.m_text) {}
+    morse_code(const morse_code& other) : m_text(other.m_text) {}
     morse_code(morse_code&& other) : m_text(std::move(other.m_text)) {}
     
     morse_code& operator=(const char text[]) { m_text = encode(text); return *this; }
